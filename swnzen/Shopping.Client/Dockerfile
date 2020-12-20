@@ -7,7 +7,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["Shopping.Client/Shopping.Client.csproj", "Shopping.Client/"]
+#COPY ["Shopping.Client/Shopping.Client.csproj", "Shopping.Client/"]
+COPY . Shopping.Client/
 RUN dotnet restore "Shopping.Client/Shopping.Client.csproj"
 COPY . .
 WORKDIR "/src/Shopping.Client"
