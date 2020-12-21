@@ -17,6 +17,7 @@ services:
     container_name: shoppingclient
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ShoppingAPIUrl=http://shoppingapi"
     depends_on:
       - shopping.db
       - shopping.api
