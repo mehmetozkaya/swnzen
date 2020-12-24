@@ -18,8 +18,7 @@ namespace Shopping.API.Controllers
         private readonly ILogger<ProductController> _logger;
 
         public ProductController(ProductContext context, ILogger<ProductController> logger)
-        {
-            // note from vs code
+        {            
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
