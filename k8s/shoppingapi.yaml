@@ -24,7 +24,10 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
             - name: DatabaseSettings__ConnectionString
-              value: mongodb://username:password@mongo-service:27017
+              valueFrom:
+                  configMapKeyRef:
+                    name: mongo-configmap
+                    key: connection_string
           resources:
             requests:
               memory: "64Mi"
