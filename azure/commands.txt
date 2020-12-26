@@ -61,7 +61,7 @@ docker push swnzenacr.azurecr.io/shoppingapi:v1
 docker push swnzenacr.azurecr.io/shoppingclient:v1
 --
 List images in registry
-az acr repository list --name swnzenacr.azurecr.io --output table
+az acr repository list --name swnzenacr --output table
 
 Result
 shoppingapi
@@ -87,3 +87,10 @@ To verify;
 kubectl get nodes
 kubectl get all
 --
+Check Kube Config
+
+kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context gcpcluster-k8s-1
+	Switched to context "gcpcluster-k8s-1"
+
