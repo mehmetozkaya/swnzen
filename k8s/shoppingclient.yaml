@@ -41,10 +41,11 @@ kind: Service
 metadata:
   name: shoppingclient-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: shoppingclient
   ports:
     - protocol: TCP
       port: 8001
-      targetPort: 80      
+      targetPort: 80
+      nodePort: 30000
