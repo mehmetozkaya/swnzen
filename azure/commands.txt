@@ -68,7 +68,7 @@ shoppingapi
 shoppingclient
 --
 See tags
-az acr repository show-tags --name swnzenacr.azurecr.io --repository shoppingclient --output table
+az acr repository show-tags --name swnzenacr --repository shoppingclient --output table
 
 Result
 v1
