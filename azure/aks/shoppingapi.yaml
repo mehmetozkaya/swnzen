@@ -31,10 +31,12 @@ spec:
           resources:
             requests:
               memory: "64Mi"
-              cpu: "250m"
+              cpu: "0.2"
             limits:
               memory: "128Mi"
-              cpu: "500m"
+              cpu: "0.4"
+      imagePullSecrets:
+        - name: acr-secret
 ---
 apiVersion: v1
 kind: Service

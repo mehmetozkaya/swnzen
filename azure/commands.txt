@@ -37,6 +37,9 @@ az group create --name myResourceGroup --location westeurope
 Create an Azure Container Registry
 az acr create --resource-group myResourceGroup --name swnzenacr --sku Basic
 --
+Enable Admin Account for ACR Pull
+az acr update -n swnzenacr --admin-enabled true
+--
 Log in to the container registry
 az acr login --name swnzenacr
 Login Succeeded
