@@ -1,4 +1,5 @@
 # Deploy to Azure Kubernetes Service
+
 # Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
@@ -56,21 +57,13 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: KubernetesManifest@0
-            displayName: Create imagePullSecret
+          - task: Kubernetes@1
             inputs:
-              action: createSecret
-              secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-              
-          - task: KubernetesManifest@0
-            displayName: Deploy to Kubernetes cluster
-            inputs:
-              action: deploy
-              manifests: |
-                $(Pipeline.Workspace)/azure/aks/shoppingapi.yaml
-              imagePullSecrets: |
-                $(imagePullSecret)
-              containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
-
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'myAKSCluster-default'
+              namespace: 'default'
+              command: 'apply'
+              useConfigurationFile: true
+              configuration: '/swnzen/azure/aks/shoppingapi.yaml'
+              secretType: 'dockerRegistry'
+              containerRegistryType: 'Azure Container Registry'
