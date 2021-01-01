@@ -8,8 +8,8 @@ trigger:
     - main
   paths:
     include:
-    - swnzen/swnzen/Shopping.API/*
-    - swnzen/manifests/shoppingapi.yaml
+    - swnzen/Shopping.API/*
+    - manifests/shoppingapi.yaml
 
 resources:
 - repo: self
