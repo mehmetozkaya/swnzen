@@ -47,25 +47,21 @@ stages:
   dependsOn: Build
 
   jobs:
-  - deployment: Deploy
-    displayName: Deploy to AKS
+  - job: Deploy
+    displayName: Deploy to k8s
     pool:
       vmImage: $(vmImageName)
-    environment: 'mehmetozkayaswnzen-8332.default'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: Kubernetes@1
-            inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: 'myAKSCluster-default'
-              namespace: 'default'
-              command: 'apply'
-              useConfigurationFile: true
-              configuration: '$(Build.SourcesDirectory)/swnzen/azure/aks/$(deploymentFile)'
-              secretType: 'dockerRegistry'
-              containerRegistryType: 'Azure Container Registry'              
-              azureSubscriptionEndpointForSecrets: 'Free Trial(7fc43c1a-9019-44b5-bb83-e4bcae6a9155)'
-              azureContainerRegistry: $(containerRegistry)
-              secretName: 'acr-secret'
+    steps:
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'myAKSCluster-default'
+        namespace: 'default'
+        command: 'apply'
+        useConfigurationFile: true
+        configuration: '$(Build.SourcesDirectory)/swnzen/azure/aks/$(deploymentFile)'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Azure Container Registry'              
+        azureSubscriptionEndpointForSecrets: 'Free Trial(7fc43c1a-9019-44b5-bb83-e4bcae6a9155)'
+        azureContainerRegistry: $(containerRegistry)
+        secretName: 'acr-secret'
