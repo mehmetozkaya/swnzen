@@ -1,10 +1,15 @@
 # Deploy to Azure Kubernetes Service
-
 # Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- main
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - swnzen/swnzen/Shopping.API/*
+    - swnzen/manifests/shoppingapi.yaml
 
 resources:
 - repo: self
@@ -12,19 +17,20 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '47ef203c-db2c-4062-aa83-df48cee9b5f8'
+  dockerRegistryServiceConnection: '71a0b997-d82e-480c-825a-49236db5fb36'
   imageRepository: 'shoppingapi'
   containerRegistry: 'swnzenacr.azurecr.io'
   dockerfilePath: 'swnzen/Shopping.API/Dockerfile'
-  tag: '$(Build.BuildId)'  
-  deploymentFile: 'shoppingapi.yaml'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'swnzenacr420019aa-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
   
+
 stages:
 - stage: Build
-  displayName: Build and push stage
+  displayName: Build stage
   jobs:  
   - job: Build
     displayName: Build
@@ -40,28 +46,40 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         buildContext: $(Build.SourcesDirectory)/swnzen
         tags: |
-          $(tag)        
+          $(tag)
+          
+    - upload: manifests
+      artifact: manifests
 
 - stage: Deploy
-  displayName: Deploy to AKS stage
+  displayName: Deploy stage
   dependsOn: Build
 
   jobs:
-  - job: Deploy
-    displayName: Deploy to k8s
+  - deployment: Deploy
+    displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    steps:
-    - task: Kubernetes@1
-      inputs:
-        connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'myAKSCluster-default'
-        namespace: 'default'
-        command: 'apply'
-        useConfigurationFile: true
-        configuration: '$(Build.SourcesDirectory)/swnzen/azure/aks/$(deploymentFile)'
-        secretType: 'dockerRegistry'
-        containerRegistryType: 'Azure Container Registry'              
-        azureSubscriptionEndpointForSecrets: 'Free Trial(7fc43c1a-9019-44b5-bb83-e4bcae6a9155)'
-        azureContainerRegistry: $(containerRegistry)
-        secretName: 'acr-secret'
+    environment: 'mehmetozkayaswnzen-1602.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+              
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/shoppingapi.yaml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
