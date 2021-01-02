@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: shoppingclient 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoppingclient
+  template:
+    metadata:
+      labels:
+        app: shoppingclient 
+    spec:
+      containers:
+        - name: shoppingclient 
+          image: swnzenacr.azurecr.io/shoppingclient
+          ports:
+          - containerPort: 80
