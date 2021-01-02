@@ -22,7 +22,7 @@ variables:
   containerRegistry: 'swnzenacr.azurecr.io'
   dockerfilePath: 'swnzen/Shopping.Client/Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'swnzenacr420019aa-auth'
+  imagePullSecret: 'swnzenacr19868204-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
