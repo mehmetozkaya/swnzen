@@ -14,9 +14,9 @@ variables:
   dockerRegistryServiceConnection: 'e040eac6-dda8-47b4-ab5f-cff1a5ce4740'
   imageRepository: 'shoppingclient'
   containerRegistry: 'swnzenacr.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'swnzen/Shopping.Client/Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'swnzenacr17233e67-auth'
+  imagePullSecret: 'swnzenacr420019aa-auth'  
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -38,6 +38,7 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: $(Build.SourcesDirectory)/swnzen
         tags: |
           $(tag)
           
