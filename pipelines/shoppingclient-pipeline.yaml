@@ -9,7 +9,7 @@ trigger:
   paths:
     include:
     - swnzen/Shopping.Client/*
-    - manifests/shoppingclient.yaml
+    - aks/shoppingclient.yaml
 
 resources:
 - repo: self
