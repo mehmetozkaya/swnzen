@@ -60,7 +60,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'mehmetozkayaswnzen-1602.default'
+    environment: 'mehmetozkayaswnzen-1021.default'
     strategy:
       runOnce:
         deploy:
